@@ -1,0 +1,26 @@
+diff --git a/src/mame/ibm/rtpc.cpp b/src/mame/ibm/rtpc.cpp
+index dc6d942c..fb44aacd 100644
+--- a/src/mame/ibm/rtpc.cpp
++++ b/src/mame/ibm/rtpc.cpp
+@@ -276,10 +276,10 @@ void rtpc_state::crra_w(u8 data)
+ {
+ 	LOG("crra_w 0x%02x (%s)\n", data, machine().describe_context());
+ 
+-	// selectively reset i/o slots 1..8
++	// selectively reset i/o slots 1..8 (reset is active low)
+ 	for (unsigned i = 0; i < 8; i++)
+ 	{
+-		if (BIT(data, i) && !BIT(m_crra, i) && m_slot[i].found())
++		if (!BIT(data, i) && BIT(m_crra, i) && m_slot[i].found())
+ 		{
+ 			LOG("reset slot %s\n", m_slot[i]->tag());
+ 			m_slot[i]->reset();
+@@ -303,7 +303,7 @@ void rtpc_state::crrb_w(u8 data)
+ 	//  6   reserved
+ 	//  7   reserved
+ 
+-	if (m_scc && BIT(data, 0))
++	if (m_scc && !BIT(data, 0) && BIT(m_crrb, 0))
+ 		m_scc->reset();
+ 
+ 	// TODO: rs232 if

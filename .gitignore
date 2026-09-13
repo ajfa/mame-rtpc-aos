@@ -1,0 +1,11 @@
+pack/mame/
+pack/roms/
+pack/disk/
+pack/lib/
+pack/cfg/
+pack/state/
+pack/shots/
+*.chd
+*.zip
+*.pyc
+__pycache__/

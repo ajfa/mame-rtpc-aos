@@ -1,0 +1,13 @@
+diff --git a/src/devices/bus/isa/fddda.cpp b/src/devices/bus/isa/fddda.cpp
+index 827c8c0d..9918bf5d 100644
+--- a/src/devices/bus/isa/fddda.cpp
++++ b/src/devices/bus/isa/fddda.cpp
+@@ -478,7 +478,7 @@ u16 isa16_fddda_device::hdc_data_r(offs_t offset, u16 mem_mask)
+ 		}
+ 	}
+ 	else if (mem_mask == 0xff00U)
+-		return hdc_error_r();
++		return u16(hdc_error_r()) << 8;
+ 	else
+ 		LOGMASKED(LOG_REGR, "%s: hdc_data_r unknown read offset 0x%x mask 0x%04x\n", machine().describe_context(), offset, mem_mask);
+ 

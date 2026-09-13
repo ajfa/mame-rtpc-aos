@@ -1,0 +1,39 @@
+diff --git a/src/devices/bus/isa/fddda.cpp b/src/devices/bus/isa/fddda.cpp
+index 827c8c0d..9918bf5d 100644
+--- a/src/devices/bus/isa/fddda.cpp
++++ b/src/devices/bus/isa/fddda.cpp
+@@ -478,7 +478,7 @@ u16 isa16_fddda_device::hdc_data_r(offs_t offset, u16 mem_mask)
+ 		}
+ 	}
+ 	else if (mem_mask == 0xff00U)
+-		return hdc_error_r();
++		return u16(hdc_error_r()) << 8;
+ 	else
+ 		LOGMASKED(LOG_REGR, "%s: hdc_data_r unknown read offset 0x%x mask 0x%04x\n", machine().describe_context(), offset, mem_mask);
+ 
+diff --git a/src/mame/ibm/rtpc.cpp b/src/mame/ibm/rtpc.cpp
+index dc6d942c..fb44aacd 100644
+--- a/src/mame/ibm/rtpc.cpp
++++ b/src/mame/ibm/rtpc.cpp
+@@ -276,10 +276,10 @@ void rtpc_state::crra_w(u8 data)
+ {
+ 	LOG("crra_w 0x%02x (%s)\n", data, machine().describe_context());
+ 
+-	// selectively reset i/o slots 1..8
++	// selectively reset i/o slots 1..8 (reset is active low)
+ 	for (unsigned i = 0; i < 8; i++)
+ 	{
+-		if (BIT(data, i) && !BIT(m_crra, i) && m_slot[i].found())
++		if (!BIT(data, i) && BIT(m_crra, i) && m_slot[i].found())
+ 		{
+ 			LOG("reset slot %s\n", m_slot[i]->tag());
+ 			m_slot[i]->reset();
+@@ -303,7 +303,7 @@ void rtpc_state::crrb_w(u8 data)
+ 	//  6   reserved
+ 	//  7   reserved
+ 
+-	if (m_scc && BIT(data, 0))
++	if (m_scc && !BIT(data, 0) && BIT(m_crrb, 0))
+ 		m_scc->reset();
+ 
+ 	// TODO: rs232 if
