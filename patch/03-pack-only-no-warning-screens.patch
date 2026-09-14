@@ -1,0 +1,17 @@
+diff --git a/src/mame/ibm/rtpc.cpp b/src/mame/ibm/rtpc.cpp
+--- a/src/mame/ibm/rtpc.cpp
++++ b/src/mame/ibm/rtpc.cpp
+@@ -609,8 +609,8 @@
+ } // anonymous namespace
+ 
+ /*   YEAR   NAME      PARENT  COMPAT  MACHINE   INPUT  CLASS        INIT         COMPANY                             FULLNAME               FLAGS */
+-COMP(1986,  rtpc010,  0,      0,      ibm6151,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 010", MACHINE_NOT_WORKING)
+-COMP(1986,  rtpc015,  0,      0,      ibm6151,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 015", MACHINE_NOT_WORKING)
+-COMP(1986,  rtpc020,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 020", MACHINE_NOT_WORKING)
+-COMP(1986,  rtpc025,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 025", MACHINE_NOT_WORKING)
+-COMP(1986,  rtpca25,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model A25", MACHINE_NOT_WORKING)
++COMP(1986,  rtpc010,  0,      0,      ibm6151,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 010", 0)
++COMP(1986,  rtpc015,  0,      0,      ibm6151,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 015", 0)
++COMP(1986,  rtpc020,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 020", 0)
++COMP(1986,  rtpc025,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model 025", 0)
++COMP(1986,  rtpca25,  0,      0,      ibm6150,  0,     rtpc_state,  empty_init,  "International Business Machines",  "IBM RT PC Model A25", 0)

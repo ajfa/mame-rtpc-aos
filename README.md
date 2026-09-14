@@ -23,7 +23,12 @@ AOS 4.3 distribution tapes and of the RT PC firmware.
 ## The two fixes
 
 Both are against MAME at `dab76193` (0.289 development). `patch/rtpc-aos.patch` has
-them together; `patch/01-*` and `patch/02-*` have them separately.
+them together; `patch/01-*` and `patch/02-*` have them separately. There is a third
+patch, `patch/03-pack-only-no-warning-screens.patch`, which is not a fix and is not
+meant for upstream: it clears the warning flags on the RT PC drivers so MAME stops
+showing its warning screen and waiting for a keypress, which a harness that has to
+start on its own cannot answer. There is no command line option for that screen;
+`skip_warnings` in ui.ini only suppresses repeats, and only for a few days.
 
 ### 1. `fddda`: the hard disk error register came back on the wrong byte lane
 
@@ -74,7 +79,11 @@ rather than by an isolated symptom of its own.
   daemons.
 * X11 (the MIT R2 tree that IBM shipped) on an EGA card, with `uwm`, `xterm` and
   `xclock`.
-* The IBM #8426 mouse: pointer motion, buttons, and the `uwm` menus.
+* The IBM #8426 mouse: pointer motion, buttons, and the `uwm` menus. Note that
+  MAME keeps the host pointer while it is over the window and no single key gives
+  it back: `sdl_osd_interface::should_hide_mouse` releases it only when the
+  emulation is paused or the pointer is outside the window, so the way out is
+  Insert then P.
 
 ## What does not work
 

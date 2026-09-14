@@ -82,6 +82,8 @@ start_mame() {
         extra="-video none -sound none"
         unset DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE
         export SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy
+    elif [ "$mode" = window-nomouse ]; then
+        extra="-window -nomaximize -sound none"
     else
         extra="-window -nomaximize -sound none -mouse -uimodekey INSERT"
     fi
@@ -180,8 +182,7 @@ log_in_and_start_x() {
     # waits for the prompt, tells the rig to log in and start X11, and looks
     # at the screen to see whether it worked; retries if it did not
     local try png pct before now i
-    # with a window MAME waits on its two warning screens until somebody
-    # presses a key, so give that all the time in the world
+    # give the machine all the time it needs to come up before looking
     if ! wait_ack "started" 3000; then return 1; fi
     for try in 1 2 3 4; do
         echo "     try $try: waiting for the console prompt..."

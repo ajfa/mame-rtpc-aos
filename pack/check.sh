@@ -26,7 +26,7 @@ if ! running; then
 fi
 
 finish() {
-    order "K sync" "K sync" "K /etc/halt"
+    order "K sync" "K sync" "K /etc/fasthalt"
     sleep 40
     kill "$(cat "$PIDF" 2>/dev/null)" 2>/dev/null; sleep 5
     kill -9 "$(cat "$PIDF" 2>/dev/null)" 2>/dev/null

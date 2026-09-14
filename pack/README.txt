@@ -35,14 +35,17 @@ The directory name cannot contain spaces.
 start-aos.sh    Boots in a window and leaves a root shell on the console.
 
 start-x11.sh    Boots, logs in, and brings up X11 on the EGA with uwm, an
-                xterm and a clock. From then on the real mouse drives the
-                RT PC one.
+                xterm and a clock. Does NOT hand the mouse to the machine.
+
+start-x11-mouse.sh
+                The same, but with the mouse. While the pointer is over the
+                window MAME keeps it: see below.
 
 check.sh        No window. Boots, verifies X11 is on screen, moves the mouse,
                 opens the menu with both buttons, halts in order, and says
                 GREEN or RED. Evidence goes to shots/.
 
-stop.sh         Halts AOS in order (sync, sync, /etc/halt) and then closes the
+stop.sh         Halts AOS in order (sync, sync, /etc/fasthalt) and then closes
                 emulator. This is the right way to finish.
 
 reset.sh        Throws the working disk away and goes back to the installed
@@ -59,16 +62,22 @@ Run stop.sh and wait for it to say "Down". It types this on the AOS console:
 
     sync
     sync
-    /etc/halt
+    /etc/fasthalt
 
 and only then closes the emulator. In the window you will see
 
     syncing disks... done
     halting (via wait)
 
-Killing the emulator with the filesystem mounted leaves it dirty and the next
-boot spends a while repairing it with fsck. It does not corrupt the disk, but
-it wastes time.
+fasthalt rather than halt leaves a /fastboot file on the disk, and with that
+there the next boot skips the filesystem check entirely: /etc/rc says "Fast
+boot ... skipping disk checks" instead of "Automatic reboot in progress" and
+the fsck that follows it. So if you always stop this way, you never wait for
+a check again.
+
+Killing the emulator with the filesystem mounted leaves it dirty, leaves no
+/fastboot, and the next boot spends a while repairing with fsck. It does not
+corrupt the disk, but it wastes time.
 
 If something wedges and stop.sh does not answer, the way out is
 
@@ -77,16 +86,24 @@ If something wedges and stop.sh does not answer, the way out is
 and then let the next boot repair.
 
 
-  THE TWO MAME WARNING SCREENS
+  NO WARNING SCREENS, AND THE POINTER
 ------------------------------------------------------------------------------
 
-The two scripts that open a window show TWO warning screens before the machine
-runs: the system information one and the red "known problems" one. Press a key
-on each. The red one appears because the RT PC driver is marked as not working
-in MAME, and there is no option to suppress it. check.sh never shows them
-because it runs with no video at all.
+MAME shows a warning screen and waits for a keypress for any system carrying
+warning flags, and the red one cannot be turned off from the command line:
+skip_warnings in ui.ini only suppresses repeats, for a few days. Since this
+harness has to start on its own, build MAME with patch/03, which clears the
+flags on the RT PC drivers. Then there is nothing to press.
+
+The pointer is the other thing to know about. With start-x11-mouse.sh, MAME
+keeps the pointer while it is over the window, and no single key gives it
+back: in MAME's own code (sdl_osd_interface::should_hide_mouse) the pointer
+is released when the emulation is paused or when the pointer is outside the
+window. So: Insert, then P to pause, move the pointer away, P again to carry
+on. From a terminal ./stop.sh always works.
 
 
+------------------------------------------------------------------------------
   USING THE MACHINE
 ------------------------------------------------------------------------------
 
@@ -97,7 +114,7 @@ The keyboard in the window is the RT PC one. Two keys to watch:
   erase is Ctrl-H, not backspace
   interrupt is Ctrl-C
 
-To release the mouse from MAME's window, press Insert.
+To get the pointer back from MAME's window, see the section above.
 
 The RT PC mouse has TWO buttons. The middle one, which is where uwm keeps its
 menus, is both at once:

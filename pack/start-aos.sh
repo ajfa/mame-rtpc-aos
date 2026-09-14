@@ -12,9 +12,8 @@ fi
 cat <<'TXT'
 Starting the IBM RT PC with AOS 4.3.
 
-MAME shows TWO warning screens before the machine runs: the system information
-one and the red "known problems" one. Press a key on each. The boot then takes
-a couple of minutes and the root session opens on its own.
+Nothing to press. The boot takes a couple of minutes and the root session
+opens on its own.
 
 To shut down, run stop.sh. Do not just close the window.
 TXT

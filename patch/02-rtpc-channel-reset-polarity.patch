@@ -1,8 +1,7 @@
 diff --git a/src/mame/ibm/rtpc.cpp b/src/mame/ibm/rtpc.cpp
-index dc6d942c..fb44aacd 100644
 --- a/src/mame/ibm/rtpc.cpp
 +++ b/src/mame/ibm/rtpc.cpp
-@@ -276,10 +276,10 @@ void rtpc_state::crra_w(u8 data)
+@@ -276,10 +276,10 @@
  {
  	LOG("crra_w 0x%02x (%s)\n", data, machine().describe_context());
  
@@ -15,7 +14,7 @@ index dc6d942c..fb44aacd 100644
  		{
  			LOG("reset slot %s\n", m_slot[i]->tag());
  			m_slot[i]->reset();
-@@ -303,7 +303,7 @@ void rtpc_state::crrb_w(u8 data)
+@@ -303,7 +303,7 @@
  	//  6   reserved
  	//  7   reserved
  
