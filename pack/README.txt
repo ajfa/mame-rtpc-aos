@@ -41,6 +41,11 @@ start-x11-mouse.sh
                 The same, but with the mouse. While the pointer is over the
                 window MAME keeps it: see below.
 
+mouse-probe.sh  Twenty seconds, no AOS: says whether the host mouse reaches
+                the emulator at all. Run it if the RT PC pointer does not
+                move. If it says the mouse does not get there, it is the host,
+                and it is usually SDL under Wayland: log in picking Xorg.
+
 check.sh        No window. Boots, verifies X11 is on screen, moves the mouse,
                 opens the menu with both buttons, halts in order, and says
                 GREEN or RED. Evidence goes to shots/.

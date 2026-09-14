@@ -83,8 +83,12 @@ start_mame() {
         unset DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE
         export SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy
     elif [ "$mode" = window-nomouse ]; then
+        # SDL under Wayland is unreliable with the pointer: ask for X11, which
+        # on Ubuntu goes through XWayland and behaves
+        export SDL_VIDEODRIVER=x11
         extra="-window -nomaximize -sound none"
     else
+        export SDL_VIDEODRIVER=x11
         extra="-window -nomaximize -sound none -mouse -uimodekey INSERT"
     fi
     # nohup so the machine survives the launcher, and the terminal closing
@@ -157,22 +161,32 @@ look() {
 
 wait_for_prompt() {
     # AOS takes as long as the host lets it to run /etc/rc, and the login
-    # prompt has no fixed time. Three snapshots eighteen seconds apart that
-    # come out byte for byte the same mean the console stopped printing,
-    # which is where the prompt is waiting. Two are not enough: /etc/rc has
-    # quiet stretches longer than that.
-    local a b same=0 i=0
-    a=$(look idle) || return 1
-    while [ $i -lt 90 ]; do
-        sleep 18
-        b=$(look idle) || return 1
-        if cmp -s "$a" "$b"; then
-            same=$((same + 1))
-            if [ $same -ge 2 ]; then return 0; fi
+    # prompt has no fixed time. The clue is the screen going still. The
+    # snapshots cannot be compared byte for byte: the cursor at the prompt
+    # blinks, so two in a row never come out identical. Compare the number of
+    # light points instead, which the cursor moves by a handful.
+    local png n prev same=0 i=0
+    prev=""
+    while [ $i -lt 60 ]; do
+        png=$(look idle) || return 1
+        n=$(light "$png")
+        if [ -z "$n" ]; then return 1; fi
+        if [ -n "$prev" ]; then
+            local d=$((n - prev))
+            if [ $d -lt 0 ]; then d=$((-d)); fi
+            if [ $d -le 25 ]; then
+                same=$((same + 1))
+                echo "     screen still for $same readings ($n points)"
+                if [ $same -ge 2 ]; then return 0; fi
+            else
+                same=0
+                echo "     screen still changing ($prev -> $n points)"
+            fi
         else
-            same=0
+            echo "     first reading of the screen: $n points"
         fi
-        a=$b
+        prev=$n
+        sleep 15
         i=$((i + 1))
     done
     return 1
