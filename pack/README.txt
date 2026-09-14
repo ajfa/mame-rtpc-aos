@@ -41,10 +41,12 @@ start-x11-mouse.sh
                 The same, but with the mouse. While the pointer is over the
                 window MAME keeps it: see below.
 
-mouse-probe.sh  Twenty seconds, no AOS: says whether the host mouse reaches
-                the emulator at all. Run it if the RT PC pointer does not
-                move. If it says the mouse does not get there, it is the host,
-                and it is usually SDL under Wayland: log in picking Xorg.
+mouse-probe.sh  Twenty five seconds, no AOS: says whether the host mouse
+                reaches the emulator at all. Run it if the RT PC pointer does
+                not move. If it says the mouse does not get there, it is the
+                host: inside VirtualBox turn off mouse integration (Input
+                menu, or Host+I), and on bare metal log in picking Xorg
+                instead of Wayland.
 
 check.sh        No window. Boots, verifies X11 is on screen, moves the mouse,
                 opens the menu with both buttons, halts in order, and says
@@ -99,6 +101,13 @@ warning flags, and the red one cannot be turned off from the command line:
 skip_warnings in ui.ini only suppresses repeats, for a few days. Since this
 harness has to start on its own, build MAME with patch/03, which clears the
 flags on the RT PC drivers. Then there is nothing to press.
+
+If the RT PC pointer does not move at all, the machine is not at fault. In a
+VirtualBox guest, mouse integration makes the pointer absolute and MAME never
+sees the relative motion its mouse is built on: turn it off with Host+I. That
+one was measured on a real installation. Under Wayland, SDL's relative
+pointer path is the other thing that breaks it, which is why the launchers
+ask for the X11 backend.
 
 The pointer is the other thing to know about. With start-x11-mouse.sh, MAME
 keeps the pointer while it is over the window, and no single key gives it

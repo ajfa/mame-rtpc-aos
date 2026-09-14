@@ -24,10 +24,12 @@ local x0, y0 = px:read(), py:read()
 say("start x=" .. x0 .. " y=" .. y0)
 
 local movidos, botones = 0, 0
-local t = 0
-while t < 20 do
+-- emu.wait counts EMULATED seconds, and with -nothrottle those run far
+-- faster than real ones: the window has to be measured with the host clock
+-- or it closes before anybody has moved anything.
+local deadline = os.time() + 25
+while os.time() < deadline do
     emu.wait(0.25)
-    t = t + 0.25
     local x, y = px:read(), py:read()
     if x ~= x0 or y ~= y0 then
         movidos = movidos + 1

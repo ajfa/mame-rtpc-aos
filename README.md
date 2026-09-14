@@ -79,11 +79,15 @@ rather than by an isolated symptom of its own.
   daemons.
 * X11 (the MIT R2 tree that IBM shipped) on an EGA card, with `uwm`, `xterm` and
   `xclock`.
-* The IBM #8426 mouse: pointer motion, buttons, and the `uwm` menus. Note that
-  MAME keeps the host pointer while it is over the window and no single key gives
-  it back: `sdl_osd_interface::should_hide_mouse` releases it only when the
-  emulation is paused or the pointer is outside the window, so the way out is
-  Insert then P.
+* The IBM #8426 mouse: pointer motion, buttons, and the `uwm` menus. Two things
+  about it are the host's doing rather than the emulation's. MAME keeps the host
+  pointer while it is over the window and no single key gives it back:
+  `sdl_osd_interface::should_hide_mouse` releases it only when the emulation is
+  paused or the pointer is outside the window, so the way out is Insert then P.
+  And if the pointer does not move at all inside AOS, look at the host first: in
+  a VirtualBox guest, mouse integration makes the pointer absolute and MAME never
+  sees the relative motion this mouse is built on. Turn it off with Host+I.
+  `pack/mouse-probe.sh` tells the two cases apart in twenty five seconds.
 
 ## What does not work
 

@@ -57,7 +57,13 @@ if grep -q "MOUSE-REACHES-MAME" "$ACKS" 2>/dev/null; then
     echo "The mouse DOES reach the emulator. If the pointer still does not move"
     echo "inside X, the problem is on the AOS side, not the host."
 else
-    echo "The mouse does NOT reach the emulator. That is a host problem, and it"
-    echo "is usually SDL under Wayland: log into Ubuntu picking Xorg from the"
-    echo "cog on the login screen, and run this again."
+    echo "The mouse does NOT reach the emulator. That is a host problem."
+    echo
+    echo "In a VirtualBox guest the cause is mouse integration: with it on, the"
+    echo "pointer is absolute and the relative motion MAME wants never arrives."
+    echo "Turn it off in the VM window, Input menu, Mouse Integration, or with"
+    echo "Host+I, and run this again."
+    echo
+    echo "On bare metal, the other known cause is SDL under Wayland: log in"
+    echo "picking Xorg from the cog on the login screen."
 fi
