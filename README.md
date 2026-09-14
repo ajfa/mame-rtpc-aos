@@ -80,9 +80,10 @@ rather than by an isolated symptom of its own.
 
 * **Floating point.** `df` and `fsck` die with `Memory fault` in the routine that
   prints a percentage. Everything that avoids floating point is fine.
-* **The floppy probe.** The adapter works, but the probe AOS runs at boot does not
-  find the drive: it depends on the 8259 being edge triggered in a way MAME does not
-  reproduce yet. Worked around in the harness, not fixed upstream.
+* **Floppy, beyond being detected.** The drive is found and attached at boot
+  (`fdc0 adapter f00003f2 IRQ 6 CPU level 4`, `fd0: 1.2M drive`, `fd0 at fdc0 slave
+  0`), which it was not before the channel reset fix. Actually reading a diskette
+  image through it has not been tested.
 * **The APA8 display.** Not a MAME problem: the X server IBM shipped with AOS 4.3 has
   drivers for 8514, aed, apa16, ega, vga and mpel, and none for the APA8 that MAME
   emulates. EGA is the only way in. See `docs/X11-AND-MOUSE.md`.

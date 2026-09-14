@@ -27,14 +27,22 @@ not touch floating point behaves.
 
 This is why the AOS installer aborts and the restore has to be done by hand.
 
-### The floppy probe
+### Floppy, beyond being detected
 
-The `fddda` adapter and its uPD765 work. What fails is the probe AOS runs at boot:
-it arms the FDC interrupt through the digital output register and expects the edge
-that follows. The 8259 in this machine is programmed edge triggered (`ICW1 = 0x12`,
-LTIM clear) and MAME's model does not produce the transition the driver waits for,
-so the drive is never attached. A Lua shim can park the probe, which is what the
-harness does; there is no upstream fix here.
+The drive is found and attached on every boot:
+
+```
+fdc0 adapter f00003f2 IRQ 6 CPU level 4
+fd0: 1.2M drive
+fd0 at fdc0 slave 0
+```
+
+During the install, under the miniroot kernel and before the channel reset fix, the
+probe did not attach it, and the diagnosis then was the edge triggered 8259
+(`ICW1 = 0x12`, LTIM clear) not producing the transition the driver waits for. That
+is no longer the behaviour, so treat the old diagnosis as superseded.
+
+What has **not** been tested is reading an actual diskette image through it.
 
 ### The APA8 display
 
